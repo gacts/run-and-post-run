@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  update-git-tag: # Reason: <https://github.com/actions/toolkit/blob/master/docs/action-versioning.md#recommendations>
+  update-git-tag: # Reason: <https://github.com/actions/toolkit/blob/main/docs/action-versioning.md#recommendations>
     name: Update latest major git tag
     runs-on: ubuntu-20.04
     steps:
