@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jetexe/run-and-post-run.git"
+    "url": "git+https://github.com/gacts/run-and-post-run.git"
   },
   "keywords": [
     "github",
@@ -15,9 +15,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jetexe/run-and-post-run/issues"
+    "url": "https://github.com/gacts/run-and-post-run/issues"
   },
-  "homepage": "https://github.com/jetexe/run-and-post-run#readme",
+  "homepage": "https://github.com/gacts/run-and-post-run#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/exec": "^1.1.1"
