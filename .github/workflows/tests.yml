@@ -1,0 +1,107 @@
+name: tests
+
+on:
+  push:
+    branches: [master, main]
+    tags-ignore: ['**']
+    paths-ignore: ['**.md']
+  pull_request:
+    paths-ignore: ['**.md']
+
+jobs:
+  gitleaks:
+    name: Gitleaks
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with: {fetch-depth: 0}
+
+      - name: Check for GitLeaks
+        uses: gacts/gitleaks@v1 # Action page: <https://github.com/gacts/gitleaks>
+
+  eslint:
+    name: Run eslint
+    runs-on: ubuntu-20.04
+    env: {FORCE_COLOR: 'true'}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with: {node-version: '16'}
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --no-progress --non-interactive
+
+      - run: yarn lint
+
+  dist-built:
+    name: Check distributive built state
+    runs-on: ubuntu-20.04
+    outputs:
+      dist-changed: ${{ steps.state.outputs.changed }}
+    env: {FORCE_COLOR: 'true'}
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with: {node-version: '16'}
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --no-progress --non-interactive
+
+      - run: yarn build
+
+      - uses: actions/upload-artifact@v3
+        with: {name: dist, path: ./dist/, retention-days: 1}
+
+      - id: state
+        run: echo "changed=`git diff --diff-filter=ACMUXTR --name-only | grep dist/ > /dev/null && echo 'true' || echo 'false'`" >> $GITHUB_OUTPUT
+
+  commit-and-push-fresh-dist:
+    name: Commit and push fresh distributive
+    needs: [dist-built]
+    if: ${{ needs.dist-built.outputs.dist-changed == 'true' }}
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with: {name: dist, path: ./dist/}
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automatic distributive rebuild
+
+  run-this-action:
+    name: Run action
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run this action
+        uses: ./
+        with:
+          run: echo "First run"
+          post: echo "First post"
+
+      - name: Run this action with only post
+        uses: ./
+        with:
+          post: echo "Second post"

@@ -1,0 +1,25 @@
+# Metadata syntax: <https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions>
+
+name: Run and post run Action
+description: A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended.
+
+inputs:
+  run:
+    description: A command that needs to be run in place.
+    required: false
+  post:
+    description: A command that needs to be run once a workflow job has ended.
+    required: true
+  working-directory:
+    description: "A working directory from which the command needs to be run."
+    required: false
+
+runs:
+  using: 'node16'
+  main: 'dist/main/index.js'
+  post: 'dist/post/index.js'
+  post-if: success()
+
+branding:
+  icon: cloud-lightning
+  color: orange

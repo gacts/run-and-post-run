@@ -1,0 +1,31 @@
+{
+  "name": "purge-jsdelivr-cache",
+  "description": "Purges file cache on jsDelivr CDN side",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "build": "ncc build -o dist/main --minify --no-cache src/main.js && ncc build -o dist/post --minify --no-cache src/post.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jetexe/run-and-post-run.git"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "jsdelivr"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jetexe/run-and-post-run/issues"
+  },
+  "homepage": "https://github.com/jetexe/run-and-post-run#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/exec": "^1.1.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.36.1",
+    "eslint": "^8.35.0"
+  }
+}
