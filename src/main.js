@@ -13,4 +13,6 @@ const input = {
   if (command !== "") {
     await exec.exec(command, [], {cwd: input.workingDirectory});
   }
-})();
+})().catch(error => {
+  core.error(error.message)
+});

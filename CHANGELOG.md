@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog][keepachangelog] and this project adheres to [Semantic Versioning][semver].
 
+## v1.0.1
+
+### Fixed
+
+- Error handling
+
 ## v1.0.0
 
 ### Added
