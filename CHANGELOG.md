@@ -4,11 +4,20 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog][keepachangelog] and this project adheres to [Semantic Versioning][semver].
 
-## v1.0.1
+## v1.1.0
+
+### Added
+
+- `run` and `post` parameters now can be a list of commands
+
+### Changed
+
+- `post` parameter is required now
+- `post` command will run even if workflow has errors
 
 ### Fixed
 
-- Error handling
+- Removed stacktrace from error
 
 ## v1.0.0
 

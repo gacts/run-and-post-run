@@ -1,18 +1,5 @@
-const core = require("@actions/core"); // https://github.com/actions/toolkit/tree/main/packages/core
-const exec = require("@actions/exec"); // https://github.com/actions/toolkit/tree/main/packages/exec
-
-// read action inputs
-const input = {
-  run: core.getInput('run'),
-  workingDirectory: core.getInput('working-directory'),
-};
+const {run} = require("./common");
 
 (async () => {
-  const command = input.run
-
-  if (command !== "") {
-    await exec.exec(command, [], {cwd: input.workingDirectory});
-  }
-})().catch(error => {
-  core.error(error.message)
-});
+  await run()
+})();
