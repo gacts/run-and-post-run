@@ -21,13 +21,17 @@ jobs:
       - name: Run this action
         uses: gacts/run-and-post-run@v1
         with:
-          run: echo "First run"
-          post: echo "First post"
+          run: echo "First"
+              "(can be multiline)"
+          post: |
+            echo "First post"
+            echo "(can run multiply commands)"
 
       - name: Run this action with only post
         uses: gacts/run-and-post-run@v1
         with:
           post: echo "Second post"
+
 ```
 
 This above configuration will produce the following:
@@ -40,11 +44,11 @@ This above configuration will produce the following:
 
 Following inputs can be used as `step.with` keys:
 
-| Name                |   Type   | Default | Required | Description                                                   |
-|---------------------|:--------:|:-------:|:--------:|---------------------------------------------------------------|
-| `run`               | `string` |         |    no    | A command that needs to be run in place.                      |
-| `post`              | `string` |         |    no    | A command that needs to be run once a workflow job has ended. |
-| `working-directory` | `string` |         |    no    | A working directory from which the command needs to be run.   |
+| Name                |        Type        | Default | Required | Description                                                    |
+|---------------------|:------------------:|:-------:|:--------:|----------------------------------------------------------------|
+| `run`               | `string` or `list` |         |    no    | A commands that needs to be run in place.                      |
+| `post`              | `string` or `list` |         |   yes    | A commands that needs to be run once a workflow job has ended. |
+| `working-directory` |      `string`      |         |    no    | A working directory from which the command needs to be run.    |
 
 ## Releasing
 
