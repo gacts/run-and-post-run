@@ -21,13 +21,17 @@ jobs:
       - name: Run this action
         uses: gacts/run-and-post-run@v1
         with:
-          run: echo "First run"
-          post: echo "First post"
+          run: echo "First"
+              "(can be multiline)"
+          post: |
+            echo "First post"
+            echo "(can run multiply commands)"
 
       - name: Run this action with only post
         uses: gacts/run-and-post-run@v1
         with:
           post: echo "Second post"
+
 ```
 
 This above configuration will produce the following:
