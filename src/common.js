@@ -25,14 +25,14 @@ export async function post() {
 function joinMultilineCommands(commands) {
   /** @type {String[]} */
   const result = []
-  const lbRe = /[\\ ]+$/
+  const re = /[\\ ]+$/
 
   for (const command of commands) {
-    if (lbRe.test(command)) {
+    if (re.test(command)) {
       if (result.length !== 0) {
-        result[result.length - 1] += command.replace(lbRe, '')
+        result[result.length - 1] += ' ' + command.replace(re, '')
       } else {
-        result.push(command.replace(lbRe, ''))
+        result.push(command.replace(re, ''))
       }
     } else {
       result.push(command)
@@ -42,6 +42,9 @@ function joinMultilineCommands(commands) {
   return result
 }
 
+/**
+ * @param {String[]} commands
+ */
 async function runCommands(commands) {
   return (async () => {
     for (const command of commands) {
