@@ -109,6 +109,13 @@ jobs:
         with:
           post: echo "Second post"
 
+      - name: Execute without shell
+        uses: ./
+        with:
+          shell: ''
+          run: echo foo
+          post: echo bar
+
       - name: Environment variables
         uses: ./
         env: {ENV_VAR: 'value123'}
