@@ -27,16 +27,20 @@ function joinMultilineCommands(commands) {
   const result = []
   const re = /[\\ ]+$/
 
-  for (const command of commands) {
+  for (let i = 0; i < commands.length; i++) {
+    const command = commands[i]
+
     if (re.test(command)) {
-      if (result.length !== 0) {
+      if (result.length !== 0) { // if not first command
         result[result.length - 1] += ' ' + command.replace(re, '')
-      } else {
+      } else if (i !== commands.length) { // is not last command
         result.push(command.replace(re, ''))
       }
-    } else {
-      result.push(command)
+
+      continue
     }
+
+    result.push(command)
   }
 
   return result
