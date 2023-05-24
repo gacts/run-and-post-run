@@ -44,14 +44,21 @@ function joinMultilineCommands(commands) {
  * @param {String[]} commands
  */
 async function runCommands(commands) {
+  /** @type {import('@actions/exec/lib/interfaces').ExecOptions} */
+  const options = {cwd: input.workingDirectory, env: process.env, silent: true}
+
   return (async () => {
     for (const command of commands) {
       if (command !== "") {
+        core.startGroup(command)
+
         if (input.shell === "") {
-          await exec.exec(command, [], {cwd: input.workingDirectory, env: process.env})
+          await exec.exec(command, [], options)
         } else {
-          await exec.exec(input.shell, ['-c', command], {cwd: input.workingDirectory, env: process.env})
+          await exec.exec(input.shell, ['-c', command], options)
         }
+
+        core.endGroup()
       }
     }
   })().catch(error => core.setFailed(error.message))
