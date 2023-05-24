@@ -1,5 +1,6 @@
 const core = require("@actions/core"); // https://github.com/actions/toolkit/tree/main/packages/core
 const exec = require("@actions/exec"); // https://github.com/actions/toolkit/tree/main/packages/exec
+const process = require("process");
 
 // read action inputs
 const input = {
@@ -20,9 +21,8 @@ async function runCommands(commands) {
   return (async () => {
     for (const command of commands) {
       if (command !== "") {
-        await exec.exec(command, [], {cwd: input.workingDirectory});
+        await exec.exec(command, [], {cwd: input.workingDirectory, env: process.env});
       }
     }
-  })().catch(error => core.error(error.message))
+  })().catch(error => core.setFailed(error.message))
 }
-
