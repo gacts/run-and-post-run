@@ -35,7 +35,7 @@ function joinMultilineCommands(commands) {
         result[result.length - 1] += ' ' + command.replace(re, '')
 
         continue
-      } else if (i !== commands.length) { // is not last command
+      } else if (i !== commands.length - 1) { // is not last command
         result.push(command.replace(re, ''))
 
         continue
