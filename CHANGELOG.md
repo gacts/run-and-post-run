@@ -4,6 +4,20 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog][keepachangelog] and this project adheres to [Semantic Versioning][semver].
 
+## UNRELEASED
+
+### Fixed
+
+- Fail the action if an error occurs, instead of just logging the error message [#7]
+
+### Added
+
+- Environment variables interpolation in `run` and `post` commands [#7]
+- Possibility to determine the shell to use for `run` and `post` commands [#7]
+- Possibility to write the multiline commands using \ separator [#7]
+
+[#7]:https://github.com/gacts/run-and-post-run/pull/7
+
 ## v1.1.0
 
 ### Added

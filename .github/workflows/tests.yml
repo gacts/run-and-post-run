@@ -104,7 +104,35 @@ jobs:
             echo "First post"
             echo "(can run multiply commands)"
 
-      - name: Run this action with only post
+      - name: Post only
         uses: ./
         with:
           post: echo "Second post"
+
+      - name: Execute without shell
+        uses: ./
+        with:
+          shell: ''
+          run: echo foo
+          post: echo bar
+
+      - name: Environment variables
+        uses: ./
+        env: { ENV_VAR: 'value123' }
+        with:
+          run: echo "$ENV_VAR" > ./test_env_var.txt
+          post: if grep -q value123 ./test_env_var.txt; then echo "Test passed"; else exit 1; fi
+
+      - name: Multiline with line breaks
+        uses: ./
+        with:
+          run: |
+            ls \
+              -la \
+              /tmp /opt \
+                /bin
+            cat /etc/passwd
+          post: echo "Foo"
+            echo "bar"
+            echo baz \ blah \
+              boom

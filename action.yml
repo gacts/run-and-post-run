@@ -13,6 +13,10 @@ inputs:
   working-directory:
     description: A working directory from which the command needs to be run.
     required: false
+  shell:
+    description: A shell to use for executing commands. Set to empty string to use the direct command call.
+    required: false
+    default: bash
 
 runs:
   using: 'node16'
