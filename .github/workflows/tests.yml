@@ -99,7 +99,7 @@ jobs:
         uses: ./
         with:
           run: echo "First"
-            "(can be multiline)"
+              "(can be multiline)"
           post: |
             echo "First post"
             echo "(can run multiply commands)"
