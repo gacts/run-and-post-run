@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog][keepachangelog] and this project adher
 
 - Environment variables interpolation in `run` and `post` commands [#7]
 - Possibility to determine the shell to use for `run` and `post` commands [#7]
+- Possibility to write the multiline commands using \ separator [#7]
 
 [#7]:https://github.com/gacts/run-and-post-run/pull/7
 

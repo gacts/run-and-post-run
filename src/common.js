@@ -25,19 +25,19 @@ export async function post() {
 function joinMultilineCommands(commands) {
   /** @type {String[]} */
   const result = []
-  const jump = '\\'
+  const lb = '\\'
 
-  commands.forEach(command => {
-    if (command.endsWith(jump)) {
+  for (const command of commands) {
+    if (command.endsWith(lb)) {
       if (result.length !== 0) {
-        result[result.length - 1] += command.trimEnd(jump)
-
-        return
+        result[result.length - 1] += command.trimEnd(lb)
+      } else {
+        result.push(command.trimEnd(lb))
       }
+    } else {
+      result.push(command)
     }
-
-    result.push(command.trimEnd(jump))
-  })
+  }
 
   return result
 }
