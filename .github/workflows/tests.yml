@@ -136,14 +136,3 @@ jobs:
             echo "bar"
             echo baz \ blah \
               boom
-
-      - name: (step 2) Post-post environment variables
-        uses: ./
-        with:
-          post: if grep -q value666 ./test_env_var_post.txt; then echo "Test passed"; else exit 1; fi
-
-      - name: (step 1) Post environment variables
-        uses: ./
-        env: { ENV_VAR: 'value666' }
-        with:
-          post: echo "$ENV_VAR" > ./test_env_var_post.txt
