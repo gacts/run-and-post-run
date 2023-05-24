@@ -52,16 +52,11 @@ async function runCommands(commands) {
   return (async () => {
     for (const command of commands) {
       if (command !== "") {
-        core.startGroup(`🚀 ${command}`)
+        core.info(command)
 
-        /** @type {import('@actions/exec/lib/interfaces').ExecOutput} */
-        let output;
-
-        if (input.shell === "") {
-          output = await exec.getExecOutput(command, [], options)
-        } else {
-          output = await exec.getExecOutput(input.shell, ['-c', command], options)
-        }
+        let output= input.shell === ""
+          ? await exec.getExecOutput(command, [], options)
+          : await exec.getExecOutput(input.shell, ['-c', command], options)
 
         core.info(output.stdout)
 
@@ -70,7 +65,7 @@ async function runCommands(commands) {
         }
 
         if (output.exitCode !== 0) {
-          core.setFailed(`Command "${command}" failed with exit code ${output.exitCode}`)
+          core.setFailed(`Command failed with exit code ${output.exitCode}`)
         }
 
         core.endGroup()
