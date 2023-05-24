@@ -24,7 +24,7 @@ export async function post() {
  */
 function joinMultilineCommands(commands) {
   const result = []
-  const re = /\\+\s*$/
+  const re = /\\\s*$/
   const buf = []
 
   for (const cmd of commands) {
