@@ -52,7 +52,7 @@ async function runCommands(commands) {
       if (command !== "") {
         core.info(`\x1b[1m$ ${command}\x1b[0m`)
 
-        let output= input.shell === ""
+        let output = input.shell === ""
           ? await exec.getExecOutput(command, [], options)
           : await exec.getExecOutput(input.shell, ['-c', command], options)
 
