@@ -113,8 +113,11 @@ jobs:
         uses: ./
         env: { ENV_VAR: 'value123' }
         with:
-          run: echo "$ENV_VAR" > ./test_env_var.txt
-          post: cat ./test_env_var.txt
+          run: |
+            printenv | sort
+            echo "$ENV_VAR" > ./test_env_var.txt
+            cat ./test_env_var.txt
+          post: true
 
       - run: |
           if grep -q value123 ./test_env_var.txt; then
