@@ -116,6 +116,7 @@ jobs:
           run: |
             echo "$ENV_VAR" > ./test_env_var.txt
             ls \
+              -la \
               ./test_env_var.txt
             cat ./test_env_var.txt
           post: |

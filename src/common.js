@@ -11,11 +11,35 @@ const input = {
 };
 
 export async function run() {
-  return runCommands(input.run)
+  return runCommands(joinMultilineCommands(input.run))
 }
 
 export async function post() {
-  return runCommands(input.post)
+  return runCommands(joinMultilineCommands(input.post))
+}
+
+/**
+ * @param {String[]} commands
+ * @return {String[]}
+ */
+function joinMultilineCommands(commands) {
+  /** @type {String[]} */
+  const result = []
+  const jump = '\\'
+
+  commands.forEach(command => {
+    if (command.endsWith(jump)) {
+      if (result.length !== 0) {
+        result[result.length - 1] += command.trimEnd(jump)
+
+        return
+      }
+    }
+
+    result.push(command.trimEnd(jump))
+  })
+
+  return result
 }
 
 async function runCommands(commands) {
