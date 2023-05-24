@@ -28,18 +28,12 @@ function joinMultilineCommands(commands) {
   const buf = []
 
   for (const cmd of commands) {
-    if (re.test(cmd)) { // if command ends with \
-      buf.push(cmd.replace(re, '')) // push command into buffer
-    } else {
-      if (buf.length !== 0) { // if buffer is not empty
-        buf.push(cmd) // push command into buffer
+    buf.push(cmd.replace(re, '')) // push command into buffer
 
-        result.push(buf.join(' ')) // join buffer and push into result
+    if (!re.test(cmd)) { // if command not ends with \
+      result.push(buf.join(' ')) // join buffer and push into result
 
-        buf.length = 0 // clear buffer
-      } else {
-        result.push(cmd)
-      }
+      buf.length = 0 // clear buffer
     }
   }
 
