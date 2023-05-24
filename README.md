@@ -49,6 +49,7 @@ Following inputs can be used as `step.with` keys:
 | `run`               | `string` or `list` |         |    no    | A commands that needs to be run in place.                      |
 | `post`              | `string` or `list` |         |   yes    | A commands that needs to be run once a workflow job has ended. |
 | `working-directory` |      `string`      |         |    no    | A working directory from which the command needs to be run.    |
+| `shell`             |      `string`      | `bash`  |    no    | A shell to use for executing commands.                         |
 
 ## Releasing
 

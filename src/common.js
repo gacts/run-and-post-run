@@ -7,6 +7,7 @@ const input = {
   run: core.getMultilineInput('run'),
   post: core.getMultilineInput('post', {required: true}),
   workingDirectory: core.getInput('working-directory'),
+  shell: core.getInput('shell'),
 };
 
 export async function run() {
@@ -21,7 +22,7 @@ async function runCommands(commands) {
   return (async () => {
     for (const command of commands) {
       if (command !== "") {
-        await exec.exec(command, [], {cwd: input.workingDirectory, env: process.env});
+        await exec.exec(input.shell, ['-c', command], {cwd: input.workingDirectory, env: process.env});
       }
     }
   })().catch(error => core.setFailed(error.message))
