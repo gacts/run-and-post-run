@@ -25,14 +25,14 @@ export async function post() {
 function joinMultilineCommands(commands) {
   /** @type {String[]} */
   const result = []
-  const lb = '\\'
+  const lbRe = /[\\ ]+$/
 
   for (const command of commands) {
-    if (command.endsWith(lb)) {
+    if (lbRe.test(command)) {
       if (result.length !== 0) {
-        result[result.length - 1] += command.trimEnd(lb)
+        result[result.length - 1] += command.replace(lbRe, '')
       } else {
-        result.push(command.trimEnd(lb))
+        result.push(command.replace(lbRe, ''))
       }
     } else {
       result.push(command)
