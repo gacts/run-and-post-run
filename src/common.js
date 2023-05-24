@@ -1,5 +1,3 @@
-import {getExecOutput} from '@actions/exec';
-
 const core = require("@actions/core"); // https://github.com/actions/toolkit/tree/main/packages/core
 const exec = require("@actions/exec"); // https://github.com/actions/toolkit/tree/main/packages/exec
 const process = require("process");
@@ -52,23 +50,27 @@ async function runCommands(commands) {
   return (async () => {
     for (const command of commands) {
       if (command !== "") {
-        core.info(command)
+        core.info(`\x1b[1m$ ${command}\x1b[0m`)
 
         let output= input.shell === ""
           ? await exec.getExecOutput(command, [], options)
           : await exec.getExecOutput(input.shell, ['-c', command], options)
 
-        core.info(output.stdout)
+        output.stdout = output.stdout.trim()
+
+        if (output.stdout !== "") {
+          core.info(output.stdout)
+        }
+
+        output.stderr = output.stderr.trim()
 
         if (output.stderr !== "") {
-          core.warning(output.stderr)
+          core.info(output.stderr)
         }
 
         if (output.exitCode !== 0) {
           core.setFailed(`Command failed with exit code ${output.exitCode}`)
         }
-
-        core.endGroup()
       }
     }
   })().catch(error => core.setFailed(error.message))
