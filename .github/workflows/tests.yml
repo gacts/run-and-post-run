@@ -120,8 +120,8 @@ jobs:
               ./test_env_var.txt
             cat ./test_env_var.txt
           post: |
-            if grep -q value123 ./test_env_var.txt; then
-              echo "Test passed"
-            else
-              exit 1
+            if grep -q value123 ./test_env_var.txt; then \
+              echo "Test passed" \
+            else \
+              exit 1 \
             fi
