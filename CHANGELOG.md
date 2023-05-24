@@ -4,6 +4,14 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog][keepachangelog] and this project adheres to [Semantic Versioning][semver].
 
+## v1.2.1
+
+### Fixed
+
+- Commands execution output is now streamed to the action output, instead of being buffered and printed at the end of the action [#8]
+
+[#8]:https://github.com/gacts/run-and-post-run/pull/8
+
 ## v1.2.0
 
 ### Fixed

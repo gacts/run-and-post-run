@@ -45,31 +45,27 @@ function joinMultilineCommands(commands) {
  */
 async function runCommands(commands) {
   /** @type {import('@actions/exec/lib/interfaces').ExecOptions} */
-  const options = {cwd: input.workingDirectory, env: process.env, silent: true}
+  const options = {
+    cwd: input.workingDirectory,
+    env: process.env,
+    silent: true,
+    listeners: {
+      stdline: (data) => core.info(data),
+      errline: (data) => core.info(data),
+    },
+  }
 
   return (async () => {
     for (const command of commands) {
       if (command !== "") {
         core.info(`\x1b[1m$ ${command}\x1b[0m`)
 
-        let output = input.shell === ""
-          ? await exec.getExecOutput(command, [], options)
-          : await exec.getExecOutput(input.shell, ['-c', command], options)
+        let exitCode = input.shell === ""
+          ? await exec.exec(command, [], options)
+          : await exec.exec(input.shell, ['-c', command], options)
 
-        output.stdout = output.stdout.trim()
-
-        if (output.stdout !== "") {
-          core.info(output.stdout)
-        }
-
-        output.stderr = output.stderr.trim()
-
-        if (output.stderr !== "") {
-          core.info(output.stderr)
-        }
-
-        if (output.exitCode !== 0) {
-          core.setFailed(`Command failed with exit code ${output.exitCode}`)
+        if (exitCode !== 0) {
+          core.setFailed(`Command failed with exit code ${exitCode}`)
         }
       }
     }
