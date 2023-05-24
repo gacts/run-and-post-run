@@ -2,11 +2,11 @@ name: tests
 
 on:
   push:
-    branches: [master, main]
-    tags-ignore: ['**']
-    paths-ignore: ['**.md']
+    branches: [ master, main ]
+    tags-ignore: [ '**' ]
+    paths-ignore: [ '**.md' ]
   pull_request:
-    paths-ignore: ['**.md']
+    paths-ignore: [ '**.md' ]
 
 jobs:
   gitleaks:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-        with: {fetch-depth: 0}
+        with: { fetch-depth: 0 }
 
       - name: Check for GitLeaks
         uses: gacts/gitleaks@v1 # Action page: <https://github.com/gacts/gitleaks>
@@ -22,12 +22,12 @@ jobs:
   eslint:
     name: Run eslint
     runs-on: ubuntu-20.04
-    env: {FORCE_COLOR: 'true'}
+    env: { FORCE_COLOR: 'true' }
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
-        with: {node-version: '16'}
+        with: { node-version: '16' }
 
       - uses: actions/cache@v3
         id: yarn-cache
@@ -46,12 +46,12 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       dist-changed: ${{ steps.state.outputs.changed }}
-    env: {FORCE_COLOR: 'true'}
+    env: { FORCE_COLOR: 'true' }
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
-        with: {node-version: '16'}
+        with: { node-version: '16' }
 
       - uses: actions/cache@v3
         id: yarn-cache
@@ -66,14 +66,14 @@ jobs:
       - run: yarn build
 
       - uses: actions/upload-artifact@v3
-        with: {name: dist, path: ./dist/, retention-days: 1}
+        with: { name: dist, path: ./dist/, retention-days: 1 }
 
       - id: state
         run: echo "changed=`git diff --diff-filter=ACMUXTR --name-only | grep dist/ > /dev/null && echo 'true' || echo 'false'`" >> $GITHUB_OUTPUT
 
   commit-and-push-fresh-dist:
     name: Commit and push fresh distributive
-    needs: [dist-built]
+    needs: [ dist-built ]
     if: ${{ needs.dist-built.outputs.dist-changed == 'true' }}
     runs-on: ubuntu-20.04
     permissions:
@@ -83,7 +83,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: actions/download-artifact@v3
-        with: {name: dist, path: ./dist/}
+        with: { name: dist, path: ./dist/ }
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -118,7 +118,7 @@ jobs:
 
       - name: Environment variables
         uses: ./
-        env: {ENV_VAR: 'value123'}
+        env: { ENV_VAR: 'value123' }
         with:
           run: echo "$ENV_VAR" > ./test_env_var.txt
           post: if grep -q value123 ./test_env_var.txt; then echo "Test passed"; else exit 1; fi

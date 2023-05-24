@@ -27,9 +27,7 @@ function joinMultilineCommands(commands) {
   const re = /\\+\s*$/
   const buf = []
 
-  for (let i = 0; i < commands.length; i++) {
-    const cmd = commands[i]
-
+  for (const cmd of commands) {
     if (re.test(cmd)) { // if command ends with \
       buf.push(cmd.replace(re, '')) // push command into buffer
     } else {

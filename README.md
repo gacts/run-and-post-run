@@ -26,6 +26,8 @@ jobs:
           post: |
             echo "First post"
             echo "(can run multiply commands)"
+            ls -la /tmp \
+              /bin /opt
 
       - name: Run this action with only post
         uses: gacts/run-and-post-run@v1
