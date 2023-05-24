@@ -23,26 +23,26 @@ export async function post() {
  * @return {String[]}
  */
 function joinMultilineCommands(commands) {
-  /** @type {String[]} */
   const result = []
-  const re = /[\\ ]+$/
+  const re = /\\+\s*$/
+  const buf = []
 
   for (let i = 0; i < commands.length; i++) {
     const command = commands[i]
 
-    if (re.test(command)) {
-      if (result.length !== 0) { // if not first command
-        result[result.length - 1] += ' ' + command.replace(re, '')
+    if (re.test(command)) { // if command ends with \
+      buf.push(command.replace(re, '')) // push command into buffer
+    } else {
+      if (buf.length !== 0) { // if buffer is not empty
+        buf.push(command) // push command into buffer
 
-        continue
-      } else if (i !== commands.length - 1) { // is not last command
-        result.push(command.replace(re, ''))
+        result.push(buf.join(' ')) // join buffer and push into result
 
-        continue
+        buf.length = 0 // clear buffer
+      } else {
+        result.push(command)
       }
     }
-
-    result.push(command)
   }
 
   return result
