@@ -17,6 +17,10 @@ inputs:
     description: A shell to use for executing commands. Set to empty string to use the direct command call.
     required: false
     default: bash
+  post-shell:
+    description: A shell to use for executing post commands. Set to empty string to use the direct command call.
+    required: false
+    default: bash
 
 runs:
   using: 'node16'
