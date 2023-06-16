@@ -4,6 +4,15 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog][keepachangelog] and this project adheres to [Semantic Versioning][semver].
 
+## v1.3.0
+
+### Added
+
+- `post-shell` option which allows to override the shell separately for `post-run` [#10] (thanks [@hummeltech])
+
+[#10]:https://github.com/gacts/run-and-post-run/pull/10
+[@hummeltech]:https://github.com/hummeltech
+
 ## v1.2.1
 
 ### Fixed
