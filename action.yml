@@ -14,9 +14,12 @@ inputs:
     description: A working directory from which the command needs to be run.
     required: false
   shell:
-    description: A shell to use for executing commands. Set to empty string to use the direct command call.
+    description: A shell to use for executing run commands. Set to empty string to use the direct command call.
     required: false
     default: bash
+  post-shell:
+    description: A shell to use for executing post commands. Defaults to value of shell input.
+    required: false
 
 runs:
   using: 'node16'

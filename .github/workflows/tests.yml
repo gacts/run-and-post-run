@@ -136,3 +136,11 @@ jobs:
             echo "bar"
             echo baz \ blah \
               boom
+
+      - name: Change post shell
+        uses: ./
+        with:
+          run: if [ "$0" = "/usr/bin/sh" ]; then echo "Test passed"; else exit 1; fi
+          shell: sh
+          post: if [ "$0" = "/usr/bin/bash" ]; then echo "Test passed"; else exit 1; fi
+          post-shell: bash

@@ -8,14 +8,15 @@ const input = {
   post: core.getMultilineInput('post', {required: true}),
   workingDirectory: core.getInput('working-directory'),
   shell: core.getInput('shell'),
+  postShell: core.getInput('post-shell'),
 };
 
 export async function run() {
-  return runCommands(joinMultilineCommands(input.run))
+  return runCommands(joinMultilineCommands(input.run), input.shell)
 }
 
 export async function post() {
-  return runCommands(joinMultilineCommands(input.post))
+  return runCommands(joinMultilineCommands(input.post), input.postShell ? input.postShell : input.shell)
 }
 
 /**
@@ -42,8 +43,9 @@ function joinMultilineCommands(commands) {
 
 /**
  * @param {String[]} commands
+ * @param {String[]} shell
  */
-async function runCommands(commands) {
+async function runCommands(commands, shell) {
   /** @type {import('@actions/exec/lib/interfaces').ExecOptions} */
   const options = {
     cwd: input.workingDirectory,
@@ -60,9 +62,9 @@ async function runCommands(commands) {
       if (command !== "") {
         core.info(`\x1b[1m$ ${command}\x1b[0m`)
 
-        let exitCode = input.shell === ""
+        let exitCode = shell === ""
           ? await exec.exec(command, [], options)
-          : await exec.exec(input.shell, ['-c', command], options)
+          : await exec.exec(shell, ['-c', command], options)
 
         if (exitCode !== 0) {
           core.setFailed(`Command failed with exit code ${exitCode}`)
