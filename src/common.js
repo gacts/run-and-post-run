@@ -8,7 +8,7 @@ const input = {
   post: core.getMultilineInput('post', {required: true}),
   workingDirectory: core.getInput('working-directory'),
   shell: core.getInput('shell'),
-  postShell: (core.getInput('post-shell') == "" ? core.getInput('shell') : core.getInput('post-shell')),
+  postShell: core.getInput('post-shell'),
 };
 
 export async function run() {
