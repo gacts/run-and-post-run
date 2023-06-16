@@ -18,9 +18,8 @@ inputs:
     required: false
     default: bash
   post-shell:
-    description: A shell to use for executing post commands. Set to empty string to use the direct command call.
+    description: A shell to use for executing post commands. Defaults to value of shell input.
     required: false
-    default: bash
 
 runs:
   using: 'node16'
