@@ -16,7 +16,7 @@ export async function run() {
 }
 
 export async function post() {
-  return runCommands(joinMultilineCommands(input.post), input.postShell)
+  return runCommands(joinMultilineCommands(input.post), input.postShell ? input.postShell : input.shell)
 }
 
 /**
