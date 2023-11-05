@@ -5,7 +5,7 @@ volumes:
 
 services:
   node:
-    image: node:16-alpine # Image page: <https://hub.docker.com/_/node>
+    image: node:20-alpine # Image page: <https://hub.docker.com/_/node>
     environment:
       PS1: '\[\033[1;32m\]\[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
       PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/app/node_modules/.bin"
