@@ -6,12 +6,12 @@ updates:
   - package-ecosystem: npm
     directory: /
     groups:
-      production: {dependency-type: production}
-      development: {dependency-type: development}
+      npm-production: {dependency-type: production}
+      npm-development: {dependency-type: development}
     schedule: {interval: monthly}
 
   - package-ecosystem: github-actions
     directory: /
     groups:
-      any: {patterns: ['*']}
+      github-actions: {patterns: ['*']}
     schedule: {interval: monthly}
