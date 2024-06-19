@@ -1,5 +1,5 @@
-const {run} = require("./common");
+const { run } = require('./common')
 
-(async () => {
+;(async () => {
   await run()
-})();
+})()

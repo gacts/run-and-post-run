@@ -1,4 +1,4 @@
-dist/** -diff linguist-generated=true
+* text=auto
 
-# Disable next extensions in project "used languages" list
+dist/** -diff linguist-generated=true
 Makefile linguist-detectable=false

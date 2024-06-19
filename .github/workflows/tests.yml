@@ -1,97 +1,72 @@
-name: tests
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# docs: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
+name: 🧪 Tests
 
 on:
   push:
-    branches: [ master, main ]
-    tags-ignore: [ '**' ]
-    paths-ignore: [ '**.md' ]
+    branches: [master, main]
+    tags-ignore: ['**']
+    paths-ignore: ['**.md']
   pull_request:
-    paths-ignore: [ '**.md' ]
+    paths-ignore: ['**.md']
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+env: {FORCE_COLOR: 'true'}
 
 jobs:
   gitleaks:
-    name: Gitleaks
-    runs-on: ubuntu-20.04
+    name: Check for GitLeaks
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-
-      - name: Check for GitLeaks
-        uses: gacts/gitleaks@v1 # Action page: <https://github.com/gacts/gitleaks>
+      - {uses: actions/checkout@v4, with: {fetch-depth: 0}}
+      - uses: gacts/gitleaks@v1
 
   eslint:
-    name: Run eslint
-    runs-on: ubuntu-20.04
-    env: { FORCE_COLOR: 'true' }
+    name: Run code linter
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --no-progress --non-interactive
-
-      - run: yarn lint
+      - {uses: gacts/setup-node-with-cache@v1, with: {node-version: 20}}
+      - run: npm install
+      - run: npm run lint
 
   dist-built:
     name: Check distributive built state
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       dist-changed: ${{ steps.state.outputs.changed }}
-    env: { FORCE_COLOR: 'true' }
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --no-progress --non-interactive
-
-      - run: yarn build
-
+      - {uses: gacts/setup-node-with-cache@v1, with: {node-version: 20}}
+      - run: npm install
+      - run: npm run build
       - uses: actions/upload-artifact@v4
-        with: { name: dist, path: ./dist/, retention-days: 1 }
-
+        with: {name: dist, path: ./dist/, retention-days: 1}
       - id: state
         run: echo "changed=`git diff --diff-filter=ACMUXTR --name-only | grep dist/ > /dev/null && echo 'true' || echo 'false'`" >> $GITHUB_OUTPUT
 
   commit-and-push-fresh-dist:
     name: Commit and push fresh distributive
-    needs: [ dist-built ]
+    needs: [dist-built]
     if: ${{ needs.dist-built.outputs.dist-changed == 'true' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/download-artifact@v4
-        with: { name: dist, path: ./dist/ }
-
+        with: {name: dist, path: ./dist/}
       - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Automatic distributive rebuild
+        with: {commit_message: Automatic distributive rebuild}
 
   run-this-action:
     name: Run action
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 

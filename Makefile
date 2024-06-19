@@ -1,25 +1,28 @@
 #!/usr/bin/make
-# Makefile readme (ru): <https://blog.hook.sh/nix/makefile-full-doc/>
-# Makefile readme (en): <https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents>
+# Makefile readme: <https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents>
 
-SHELL = /bin/bash
-DC_RUN_ARGS = --rm --user "$(shell id -u):$(shell id -g)"
+.DEFAULT_GOAL := build
+.MAIN := build
 
-.PHONY : help install shell lint test build
-.DEFAULT_GOAL : help
+NODE_IMAGE = node:20-alpine
+RUN_ARGS = --rm -v "$(shell pwd):/src:rw" \
+	-t --workdir "/src" \
+	-u "$(shell id -u):$(shell id -g)" \
+	-e "NPM_CONFIG_UPDATE_NOTIFIER=false" \
+	-e PATH="$$PATH:/src/node_modules/.bin" $(NODE_IMAGE)
 
-help: ## Show this help
-	@printf "\033[33m%s:\033[0m\n" 'Available commands'
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[32m%-18s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
+.PHONY: install
 install: ## Install all dependencies
-	docker-compose run $(DC_RUN_ARGS) node yarn install --no-progress --non-interactive
+	docker run $(RUN_ARGS) npm install
 
+.PHONY: shell
 shell: ## Start shell into a container with node
-	docker-compose run $(DC_RUN_ARGS) node sh
+	docker run -e "PS1=\[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]" -i $(RUN_ARGS) sh
 
-lint: ## Execute provided linters
-	docker-compose run $(DC_RUN_ARGS) node yarn lint
+.PHONY: lint
+lint: ## Run lint
+	docker run $(RUN_ARGS) npm run lint
 
-build: ## Build frontend
-	docker-compose run $(DC_RUN_ARGS) node yarn build
+.PHONY: build
+build: install ## Build the extension and pack it into a zip file
+	docker run $(RUN_ARGS) npm run build
