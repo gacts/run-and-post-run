@@ -1,6 +1,6 @@
-const core = require("@actions/core"); // https://github.com/actions/toolkit/tree/main/packages/core
-const exec = require("@actions/exec"); // https://github.com/actions/toolkit/tree/main/packages/exec
-const process = require("process");
+const core = require('@actions/core') // https://github.com/actions/toolkit/tree/main/packages/core
+const exec = require('@actions/exec') // https://github.com/actions/toolkit/tree/main/packages/exec
+const process = require('process')
 
 // read action inputs
 const input = {
@@ -9,7 +9,7 @@ const input = {
   workingDirectory: core.getInput('working-directory'),
   shell: core.getInput('shell'),
   postShell: core.getInput('post-shell'),
-};
+}
 
 export async function run() {
   return runCommands(joinMultilineCommands(input.run), input.shell)
@@ -43,7 +43,9 @@ function joinMultilineCommands(commands) {
 
 /**
  * @param {String[]} commands
- * @param {String[]} shell
+ * @param {String} shell
+ *
+ * @return {Promise<void>}
  */
 async function runCommands(commands, shell) {
   /** @type {import('@actions/exec/lib/interfaces').ExecOptions} */
@@ -59,10 +61,10 @@ async function runCommands(commands, shell) {
 
   return (async () => {
     for (const command of commands) {
-      if (command !== "") {
+      if (command && command.trim() !== '') {
         core.info(`\x1b[1m$ ${command}\x1b[0m`)
 
-        let exitCode = shell === ""
+        const exitCode = shell === ''
           ? await exec.exec(command, [], options)
           : await exec.exec(shell, ['-c', command], options)
 

@@ -1,9 +1,11 @@
 {
   "name": "run-and-post-run",
-  "description": "A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended.",
+  "description": "A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended",
   "scripts": {
-    "lint": "eslint src",
-    "build": "ncc build -o dist/main --minify --no-cache src/main.js && ncc build -o dist/post --minify --no-cache src/post.js"
+    "lint": "eslint --config package.json ./src/**/*.js",
+    "build:main": "ncc build -o dist/main --minify --no-cache src/main.js",
+    "build:post": "ncc build -o dist/post --minify --no-cache src/post.js",
+    "build": "npm run build:main && npm run build:post"
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,18 @@
   "devDependencies": {
     "@vercel/ncc": "^0.38.1",
     "eslint": "^8.57.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "commonjs": true,
+      "es6": true,
+      "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2018
+    },
+    "rules": {}
   }
 }

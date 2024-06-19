@@ -1,33 +1,29 @@
-name: release
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# docs: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
+name: 🚀 Release
 
 on:
   release: # Docs: <https://help.github.com/en/articles/events-that-trigger-workflows#release-event-release>
     types: [published]
 
 jobs:
-  update-git-tag: # Reason: <https://github.com/actions/toolkit/blob/main/docs/action-versioning.md#recommendations>
+  update-git-tag: # Reason: <https://github.com/actions/toolkit/blob/master/docs/action-versioning.md#recommendations>
     name: Update latest major git tag
-    runs-on: ubuntu-20.04
-    permissions: write-all
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: gacts/github-slug@v1
-        id: slug
-
-      - name: Setup git
-        env: {REPO_PATH: "${{ github.repository_owner }}/${{ github.event.repository.name }}"}
+      - {uses: gacts/github-slug@v1, id: slug}
+      - env: {REPO_PATH: "${{ github.repository_owner }}/${{ github.event.repository.name }}"}
         run: |
           git config --local user.email 'actions@github.com'
           git config --local user.name "${{ github.actor }}"
           git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/$REPO_PATH.git"
-
       - name: Update major tag
         env: {VERSION: "${{ steps.slug.outputs.version-major }}"}
         run: |
           git tag -fa "v$VERSION" -m "Update v$VERSION tag (using GitHub actions)"
           git push --set-upstream origin "v$VERSION" --force
-
       - name: Update minor tag
         env: {VERSION: "${{ steps.slug.outputs.version-major }}.${{ steps.slug.outputs.version-minor }}"}
         run: |

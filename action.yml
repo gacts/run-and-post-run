@@ -1,30 +1,31 @@
-# Metadata syntax: <https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions>
+# yaml-language-server: $schema=https://json.schemastore.org/github-action.json
+# docs: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 
 name: Run and post run Action
-description: A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended.
+description: A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended
 
 inputs:
   run:
-    description: A command or list of commands that needs to be run in place.
+    description: A command or list of commands that needs to be run in place
     required: false
   post:
-    description: A command or list of commands that needs to be run once a workflow job has ended.
+    description: A command or list of commands that needs to be run once a workflow job has ended
     required: true
   working-directory:
-    description: A working directory from which the command needs to be run.
+    description: A working directory from which the command needs to be run
     required: false
   shell:
-    description: A shell to use for executing run commands. Set to empty string to use the direct command call.
+    description: A shell to use for executing run commands. Set to empty string to use the direct command call
     required: false
     default: bash
   post-shell:
-    description: A shell to use for executing post commands. Defaults to value of shell input.
+    description: A shell to use for executing post commands. Defaults to value of shell input
     required: false
 
 runs:
-  using: 'node20'
-  main: 'dist/main/index.js'
-  post: 'dist/post/index.js'
+  using: node20
+  main: dist/main/index.js
+  post: dist/post/index.js
 
 branding:
   icon: cloud-lightning
