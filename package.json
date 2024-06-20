@@ -2,7 +2,7 @@
   "name": "run-and-post-run",
   "description": "A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended",
   "scripts": {
-    "lint": "eslint --config package.json ./src/**/*.js",
+    "lint": "eslint --config package.json './src/**/*.js'",
     "build:main": "ncc build -o dist/main --minify --no-cache src/main.js",
     "build:post": "ncc build -o dist/post --minify --no-cache src/post.js",
     "build": "npm run build:main && npm run build:post"
