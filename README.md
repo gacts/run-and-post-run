@@ -66,6 +66,9 @@ To release a new version:
 
 Major and minor git tags (`v1` and `v1.2` if you publish a `v1.2.Z` release) will be updated automatically.
 
+> [!TIP]
+> Use [Dependabot](https://bit.ly/45zwLL1) to keep this action updated in your repository.
+
 ## Support
 
 [![Issues][badge_issues]][link_issues]
