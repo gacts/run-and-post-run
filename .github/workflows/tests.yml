@@ -98,6 +98,18 @@ jobs:
           run: echo "$ENV_VAR" > ./test_env_var.txt
           post: if grep -q value123 ./test_env_var.txt; then echo "Test passed"; else exit 1; fi
 
+      - name: Inline variables
+        uses: ./
+        with:
+          run: |
+            INLINE_VAR="value123" ; \
+            echo $INLINE_VAR; \
+            if [ "$INLINE_VAR" = "value123" ]; then echo "Test passed"; else exit 1; fi
+            echo "SHARED_VAR=value" >> $GITHUB_ENV
+          post: |
+            echo "${{ env.SHARED_VAR }}"
+            if [ "${{ env.SHARED_VAR }}" = "value" ]; then echo "Test passed"; else exit 1; fi
+
       - name: Multiline with line breaks
         uses: ./
         with:
