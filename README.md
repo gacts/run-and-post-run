@@ -42,6 +42,8 @@ This above configuration will produce the following:
 
 ![CI output example](https://github.com/gacts/run-and-post-run/assets/7326800/a73d2138-c773-494a-9922-2ae182ba87d5)
 
+More examples can be found in the [tests](./.github/workflows/tests.yml).
+
 ## Customizing
 
 ### Inputs
