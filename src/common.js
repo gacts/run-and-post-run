@@ -63,6 +63,8 @@ async function runCommands(commands, shell) {
   return (async () => {
     for (const command of commands) {
       if (command && command.trim() !== '') {
+        core.debug(`input: ${JSON.stringify(input)}`)
+
         // make this behavior default in the next major version
         if (!input.disableCommandTrace) {
           core.info(`\x1b[1m$ ${command}\x1b[0m`)
