@@ -1,5 +1,5 @@
-const { post } = require('./common')
-
+import { post } from './common'
+import { setFailed } from '@actions/core'
 ;(async () => {
-  await post()
+  await post().catch(setFailed)
 })()

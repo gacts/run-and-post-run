@@ -1,11 +1,14 @@
 {
   "name": "run-and-post-run",
   "description": "A simple GitHub action that allows you to execute commands on place and in post-run, once a workflow job has ended",
+  "type": "module",
   "scripts": {
-    "lint": "eslint --config package.json './src/**/*.js'",
-    "build:main": "ncc build -o dist/main --minify --no-cache src/main.js",
-    "build:post": "ncc build -o dist/post --minify --no-cache src/post.js",
-    "build": "npm run build:main && npm run build:post"
+    "lint": "eslint .",
+    "format:write": "npx prettier --write .",
+    "format:check": "npx prettier --check .",
+    "build": "npx rollup --config rollup.config.js",
+    "watch": "npm run build -- --watch",
+    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest"
   },
   "repository": {
     "type": "git",
@@ -25,20 +28,19 @@
     "@actions/exec": "^1.1.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.3",
-    "eslint": "^8.57.1"
-  },
-  "eslintConfig": {
-    "env": {
-      "commonjs": true,
-      "es6": true,
-      "node": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-      "sourceType": "module",
-      "ecmaVersion": 2018
-    },
-    "rules": {}
+    "@eslint/compat": "^1.2.7",
+    "@jest/globals": "^29.7.0",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "jest": "^29.7.0",
+    "prettier": "^3.5.2",
+    "prettier-eslint": "^16.3.0",
+    "rollup": "^4.34.8"
   }
 }

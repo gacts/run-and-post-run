@@ -9,7 +9,7 @@ RUN_ARGS = --rm -v "$(shell pwd):/src:rw" \
 	-t --workdir "/src" \
 	-u "$(shell id -u):$(shell id -g)" \
 	-e "NPM_CONFIG_UPDATE_NOTIFIER=false" \
-	-e PATH="$$PATH:/src/node_modules/.bin" $(NODE_IMAGE)
+	$(NODE_IMAGE)
 
 .PHONY: install
 install: ## Install all dependencies
@@ -22,6 +22,10 @@ shell: ## Start shell into a container with node
 .PHONY: lint
 lint: ## Run lint
 	docker run $(RUN_ARGS) npm run lint
+
+.PHONY: build
+fix: ## Run fix
+	docker run $(RUN_ARGS) npm run format:write
 
 .PHONY: build
 build: install ## Build the extension and pack it into a zip file

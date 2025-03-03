@@ -21,11 +21,15 @@ inputs:
   post-shell:
     description: A shell to use for executing post commands. Defaults to value of shell input
     required: false
+  verbose:
+    description: A flag to enable verbose output
+    required: false
+    default: 'false'
 
 runs:
   using: node20
-  main: dist/main/index.js
-  post: dist/post/index.js
+  main: dist/main.mjs
+  post: dist/post.mjs
 
 branding:
   icon: cloud-lightning
