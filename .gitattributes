@@ -2,3 +2,5 @@
 
 dist/** -diff linguist-generated=true
 Makefile linguist-detectable=false
+
+dist/** -diff

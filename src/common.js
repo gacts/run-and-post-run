@@ -1,4 +1,5 @@
-import process from 'node:process'
+import { env as processEnv } from 'node:process'
+import { EOL } from 'os'
 
 import parseStringArgs from './string-argv'
 import createTmpFile from './tmpfile'
@@ -15,8 +16,6 @@ const input = {
   postShell: core.getInput('post-shell'),
   verbose: core.getBooleanInput('verbose'),
 }
-
-const newLine = core.platform.isWindows ? '\r\n' : '\n'
 
 export async function run() {
   return runCommand(input.run, input.shell)
@@ -36,7 +35,7 @@ async function runCommand(commands, shell) {
   /** @type {import('@actions/exec/lib/interfaces').ExecOptions} */
   const options = {
     cwd: input.workingDirectory,
-    env: process.env,
+    env: processEnv,
     silent: !(input.verbose || core.isDebug()),
     listeners: {
       stdline: (data) => core.info(data),
@@ -45,7 +44,6 @@ async function runCommand(commands, shell) {
   }
 
   core.debug('debug mode enabled')
-  core.debug(`is silent ${options.silent}`)
 
   let shellCommand, argFormat
 
@@ -105,6 +103,9 @@ async function runCommand(commands, shell) {
 /**
  * Get the shell command and args format for the given script type
  *
+ * The implementation is based on the official actions runner:
+ * {@link https://github.com/actions/runner/blob/v2.322.0/src/Runner.Worker/Handlers/ScriptHandlerHelpers.cs#L13}
+ *
  * @param scriptType {string}
  * @return {string[]}
  */
@@ -129,6 +130,9 @@ function getArgFormat(scriptType) {
 /**
  * Get the file extension for the given script type
  *
+ * The implementation is based on the official actions runner:
+ * {@link https://github.com/actions/runner/blob/v2.322.0/src/Runner.Worker/Handlers/ScriptHandlerHelpers.cs#L23}
+ *
  * @param scriptType {string}
  * @return {string}
  */
@@ -151,6 +155,9 @@ function getFileExt(scriptType) {
 /**
  * Fixup the script contents for the given script type
  *
+ * The implementation is based on the official actions runner:
+ * {@link https://github.com/actions/runner/blob/v2.322.0/src/Runner.Worker/Handlers/ScriptHandlerHelpers.cs#L51}
+ *
  * @param scriptType{string}
  * @param contents{string}
  * @return {string}
@@ -158,14 +165,14 @@ function getFileExt(scriptType) {
 function fixupScript(scriptType, contents) {
   switch (scriptType) {
     case 'cmd':
-      contents = `@echo off${newLine}${contents}`
+      contents = `@echo off${EOL}${contents}`
       break
     case 'powershell':
     case 'pwsh':
       const prepend = "$ErrorActionPreference = 'stop'"
       const append =
         'if ((Test-Path -LiteralPath variable:\\LASTEXITCODE)) { exit $LASTEXITCODE }'
-      contents = `${prepend}${newLine}${contents}${newLine}${append}`
+      contents = `${prepend}${EOL}${contents}${EOL}${append}`
       break
   }
 

@@ -23,7 +23,7 @@ shell: ## Start shell into a container with node
 lint: ## Run lint
 	docker run $(RUN_ARGS) npm run lint
 
-.PHONY: build
+.PHONY: fix
 fix: ## Run fix
 	docker run $(RUN_ARGS) npm run format:write
 

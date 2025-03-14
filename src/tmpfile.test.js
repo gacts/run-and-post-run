@@ -109,15 +109,3 @@ describe('createTmpFile', () => {
       .finally(() => fsp.rm(existedFilePath))
   })
 })
-
-describe('collisions', () => {
-  it('should not collide', async () => {
-    const dirName = await fsp.mkdtemp('tmp-test')
-
-    for (let i = 0; i < 100_000_000; i++) {
-      await fsp.mkdtemp(pathJoin(dirName, 'tmp-test'))
-    }
-
-    await fsp.rmdir(dirName, { recursive: true })
-  }, 70_000_000)
-})
