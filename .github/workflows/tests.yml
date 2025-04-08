@@ -85,66 +85,60 @@ jobs:
       - name: Run this action
         uses: ./
         with:
-          run: echo run="First"
-            "(can be multiline)" >> "$GITHUB_OUTPUT"
+          run: echo "First"
+            "(can be multiline)"
           post: |
-            echo post="First post" >> "$GITHUB_OUTPUT"
-            echo post2="(can run multiply commands)" >> "$GITHUB_OUTPUT"
+            echo "First post"
+            echo "(can run multiply commands)"
 
       - name: Post only
         uses: ./
         with:
-          post: echo post="Second post" >> "$GITHUB_OUTPUT"
+          post: echo "Second post"
 
       - name: Execute without shell
         uses: ./
         with:
           shell: ''
-          run: echo run=foo >> "$GITHUB_OUTPUT"
-          post: echo post=bar >> "$GITHUB_OUTPUT"
+          run: echo foo
+          post: echo bar
 
       - name: Environment variables
         uses: ./
         env: {ENV_VAR: 'value123'}
         with:
-          run: echo "post=$ENV_VAR" > ./test_env_var.txt
-          post: cat ./test_env_var.txt >> "$GITHUB_OUTPUT"
+          run: echo "$ENV_VAR" > ./test_env_var.txt
+          post: cat ./test_env_var.txt
 
       - name: Inline variables
         uses: ./
         with:
           run: |
             INLINE_VAR="value123"
-            echo run=$INLINE_VAR >> "$GITHUB_OUTPUT"
+            echo $INLINE_VAR
             echo "SHARED_VAR=value" >> "$GITHUB_ENV"
           post: |
-            echo "post=${{ env.SHARED_VAR }}" >> "$GITHUB_OUTPUT"
+            echo "post=${{ env.SHARED_VAR }}"
 
       - name: Multiline with line breaks
         uses: ./
         with:
-          post: echo post=baz \ blah \
-            boom >> "$GITHUB_OUTPUT"
+          post: echo baz \ blah \
+            boom
 
       - name: Change post shell
         uses: ./
         with:
-          run: |
-            import os
-            with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('run=python\n')
+          run: print("python")
           shell: python
-          post: |
-            import os
-            with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write('post=python\n')
+          post: print("post python")
           post-shell: python
 
       - name: Post run condition
         uses: ./
         with:
           run: echo "Use job.status variable to check the job status (success, failure or cancelled)"
-          post: if [ "${{ job.status }}" = "success" ]; then echo "post=Test passed" >> "$GITHUB_OUTPUT"; else exit 1; fi
+          post: if [ "${{ job.status }}" = "success" ]; then echo "Test passed"; else exit 1; fi
 
       - name: Group of log lines
         uses: ./
@@ -158,19 +152,19 @@ jobs:
         uses: ./
         if: ${{ matrix.os == 'windows' }}
         with:
-          post: echo "post=Windows cmd">> "%GITHUB_OUTPUT%"
+          post: echo "Windows cmd">> "%GITHUB_OUTPUT%"
           shell: cmd
 
       - name: windows-powershell
         if: ${{ matrix.os == 'windows' }}
         uses: ./
         with:
-          post: Write-Output "post=Windows powershell">> "%GITHUB_OUTPUT%"
+          post: Write-Output "Windows powershell">> "%GITHUB_OUTPUT%"
           shell: powershell
 
       - name: windows-pwsh
         if: ${{ matrix.os == 'windows' }}
         uses: ./
         with:
-          post: Write-Output "post=Windows pwsh">> "%GITHUB_OUTPUT%"
+          post: Write-Output "Windows pwsh">> "%GITHUB_OUTPUT%"
           shell: pwsh
