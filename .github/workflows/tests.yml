@@ -152,19 +152,26 @@ jobs:
         uses: ./
         if: ${{ matrix.os == 'windows' }}
         with:
-          post: echo "Windows cmd">> "%GITHUB_OUTPUT%"
+          post: echo "Windows cmd"
           shell: cmd
 
       - name: windows-powershell
         if: ${{ matrix.os == 'windows' }}
         uses: ./
         with:
-          post: Write-Output "Windows powershell">> "%GITHUB_OUTPUT%"
+          post: Write-Output "Windows powershell"
           shell: powershell
 
       - name: windows-pwsh
         if: ${{ matrix.os == 'windows' }}
         uses: ./
         with:
-          post: Write-Output "Windows pwsh">> "%GITHUB_OUTPUT%"
+          post: Write-Output "Windows pwsh"
           shell: pwsh
+
+      - name: example run
+        shell: python
+        run: |
+            print("Hello world")
+            print("This is a test")
+            echo "This is a test"
