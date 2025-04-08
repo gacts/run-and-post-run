@@ -158,20 +158,19 @@ jobs:
         uses: ./
         if: ${{ matrix.os == 'windows' }}
         with:
-          post: echo "post=Windows">> "%GITHUB_OUTPUT%"
+          post: echo "post=Windows cmd">> "%GITHUB_OUTPUT%"
           shell: cmd
 
       - name: windows-powershell
         if: ${{ matrix.os == 'windows' }}
         uses: ./
         with:
-          post: Write-Output "post=Windows">> "%GITHUB_OUTPUT%"
+          post: Write-Output "post=Windows powershell">> "%GITHUB_OUTPUT%"
           shell: powershell
 
       - name: windows-pwsh
         if: ${{ matrix.os == 'windows' }}
         uses: ./
         with:
-          post: Write-Output "post=Windows">> "%GITHUB_OUTPUT%"
+          post: Write-Output "post=Windows pwsh">> "%GITHUB_OUTPUT%"
           shell: pwsh
-
