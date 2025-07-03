@@ -1,0 +1,9 @@
+.DS_Store
+.licenses/
+dist/
+node_modules/
+coverage/
+.devcontainer/
+.github/
+docker/
+!*.js

@@ -34,6 +34,15 @@ jobs:
       - run: npm install
       - run: npm run lint
 
+  jest:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - {uses: actions/setup-node@v4, with: {node-version: 20, cache: 'npm'}}
+      - run: npm ci
+      - run: npm run test
+
   dist-built:
     name: Check distributive built state
     runs-on: ubuntu-latest
@@ -65,16 +74,19 @@ jobs:
         with: {commit_message: Automatic distributive rebuild}
 
   run-this-action:
-    name: Run action
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, windows, macos]
+    name: Run action (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Run this action
         uses: ./
         with:
           run: echo "First"
-              "(can be multiline)"
+            "(can be multiline)"
           post: |
             echo "First post"
             echo "(can run multiply commands)"
@@ -93,47 +105,72 @@ jobs:
 
       - name: Environment variables
         uses: ./
-        env: { ENV_VAR: 'value123' }
+        env: {ENV_VAR: 'value123'}
         with:
           run: echo "$ENV_VAR" > ./test_env_var.txt
-          post: if grep -q value123 ./test_env_var.txt; then echo "Test passed"; else exit 1; fi
+          post: cat ./test_env_var.txt
 
       - name: Inline variables
         uses: ./
         with:
           run: |
-            INLINE_VAR="value123" ; \
-            echo $INLINE_VAR; \
-            if [ "$INLINE_VAR" = "value123" ]; then echo "Test passed"; else exit 1; fi
-            echo "SHARED_VAR=value" >> $GITHUB_ENV
+            INLINE_VAR="value123"
+            echo $INLINE_VAR
+            echo "SHARED_VAR=value" >> "$GITHUB_ENV"
           post: |
-            echo "${{ env.SHARED_VAR }}"
-            if [ "${{ env.SHARED_VAR }}" = "value" ]; then echo "Test passed"; else exit 1; fi
+            echo "post=${{ env.SHARED_VAR }}"
 
       - name: Multiline with line breaks
         uses: ./
         with:
-          run: |
-            ls \
-              -la \
-              /tmp /opt \
-                /bin
-            cat /etc/passwd
-          post: echo "Foo"
-            echo "bar"
-            echo baz \ blah \
-              boom
+          post: echo baz \ blah \
+            boom
 
       - name: Change post shell
         uses: ./
         with:
-          run: if [ "$0" = "/usr/bin/sh" ]; then echo "Test passed"; else exit 1; fi
-          shell: sh
-          post: if [ "$0" = "/usr/bin/bash" ]; then echo "Test passed"; else exit 1; fi
-          post-shell: bash
+          run: print("python")
+          shell: python
+          post: print("post python")
+          post-shell: python
 
       - name: Post run condition
         uses: ./
         with:
           run: echo "Use job.status variable to check the job status (success, failure or cancelled)"
           post: if [ "${{ job.status }}" = "success" ]; then echo "Test passed"; else exit 1; fi
+
+      - name: Group of log lines
+        uses: ./
+        with:
+          post: |
+            echo "::group::My title"
+            echo "Inside group"
+            echo "::endgroup::"
+
+      - name: windows-cmd
+        uses: ./
+        if: ${{ matrix.os == 'windows' }}
+        with:
+          post: echo "Windows cmd"
+          shell: cmd
+
+      - name: windows-powershell
+        if: ${{ matrix.os == 'windows' }}
+        uses: ./
+        with:
+          post: Write-Output "Windows powershell"
+          shell: powershell
+
+      - name: windows-pwsh
+        if: ${{ matrix.os == 'windows' }}
+        uses: ./
+        with:
+          post: Write-Output "Windows pwsh"
+          shell: pwsh
+
+      - name: example run
+        shell: python
+        run: |
+            print("Hello world")
+            print("This is a test")

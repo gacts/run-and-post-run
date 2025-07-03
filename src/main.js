@@ -1,5 +1,4 @@
-const { run } = require('./common')
+import { run } from './common'
+import { setFailed } from '@actions/core'
 
-;(async () => {
-  await run()
-})()
+run().catch(setFailed)
