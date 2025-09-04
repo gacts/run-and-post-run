@@ -12,7 +12,7 @@ jobs:
     name: Update latest major git tag
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - {uses: gacts/github-slug@v1, id: slug}
       - env: {REPO_PATH: "${{ github.repository_owner }}/${{ github.event.repository.name }}"}
         run: |
