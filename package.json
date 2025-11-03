@@ -19,6 +19,7 @@
   "bugs": {
     "url": "https://github.com/gacts/run-and-post-run/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/gacts/run-and-post-run#readme",
   "dependencies": {
     "@actions/core": "^1.11.1",
@@ -40,5 +41,11 @@
       "ecmaVersion": 2018
     },
     "rules": {}
+  },
+  "volta": {
+    "node": "24"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }
