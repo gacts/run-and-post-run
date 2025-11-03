@@ -44,7 +44,7 @@ jobs:
       - {uses: actions/setup-node@v4, with: {node-version: 20, cache: 'npm'}}
       - run: npm install
       - run: npm run build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with: {name: dist, path: ./dist/, retention-days: 1}
       - id: state
         run: echo "changed=`git diff --diff-filter=ACMUXTR --name-only | grep dist/ > /dev/null && echo 'true' || echo 'false'`" >> $GITHUB_OUTPUT
@@ -59,9 +59,9 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with: {name: dist, path: ./dist/}
-      - uses: stefanzweifel/git-auto-commit-action@v6
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with: {commit_message: Automatic distributive rebuild}
 
   run-this-action:
