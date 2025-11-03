@@ -1,6 +1,6 @@
-const core = require('@actions/core') // https://github.com/actions/toolkit/tree/main/packages/core
-const exec = require('@actions/exec') // https://github.com/actions/toolkit/tree/main/packages/exec
-const process = require('process')
+import core from '@actions/core' // https://github.com/actions/toolkit/tree/main/packages/core
+import exec from '@actions/exec' // https://github.com/actions/toolkit/tree/main/packages/exec
+import process from 'process'
 
 // read action inputs
 const input = {

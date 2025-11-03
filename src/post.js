@@ -1,4 +1,4 @@
-const { post } = require('./common')
+import { post } from './common.js'
 
 ;(async () => {
   await post()

@@ -1,4 +1,4 @@
-const { run } = require('./common')
+import { run } from './common.js'
 
 ;(async () => {
   await run()
