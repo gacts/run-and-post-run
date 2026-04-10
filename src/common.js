@@ -1,14 +1,14 @@
-import core from '@actions/core' // https://github.com/actions/toolkit/tree/main/packages/core
-import exec from '@actions/exec' // https://github.com/actions/toolkit/tree/main/packages/exec
+import { getMultilineInput, getInput, info, setFailed } from '@actions/core' // https://github.com/actions/toolkit/tree/main/packages/core
+import { exec } from '@actions/exec' // https://github.com/actions/toolkit/tree/main/packages/exec
 import process from 'process'
 
 // read action inputs
 const input = {
-  run: core.getMultilineInput('run'),
-  post: core.getMultilineInput('post', {required: true}),
-  workingDirectory: core.getInput('working-directory'),
-  shell: core.getInput('shell'),
-  postShell: core.getInput('post-shell'),
+  run: getMultilineInput('run'),
+  post: getMultilineInput('post', {required: true}),
+  workingDirectory: getInput('working-directory'),
+  shell: getInput('shell'),
+  postShell: getInput('post-shell'),
 }
 
 export async function run() {
@@ -54,24 +54,24 @@ async function runCommands(commands, shell) {
     env: process.env,
     silent: true,
     listeners: {
-      stdline: (data) => core.info(data),
-      errline: (data) => core.info(data),
+      stdline: (data) => info(data),
+      errline: (data) => info(data),
     },
   }
 
   return (async () => {
     for (const command of commands) {
       if (command && command.trim() !== '') {
-        core.info(`\x1b[1m$ ${command}\x1b[0m`)
+        info(`\x1b[1m$ ${command}\x1b[0m`)
 
         const exitCode = shell === ''
-          ? await exec.exec(command, [], options)
-          : await exec.exec(shell, ['-c', command], options)
+          ? await exec(command, [], options)
+          : await exec(shell, ['-c', command], options)
 
         if (exitCode !== 0) {
-          core.setFailed(`Command failed with exit code ${exitCode}`)
+          setFailed(`Command failed with exit code ${exitCode}`)
         }
       }
     }
-  })().catch(error => core.setFailed(error.message))
+  })().catch(error => setFailed(error.message))
 }
