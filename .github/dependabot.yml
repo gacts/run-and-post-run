@@ -6,6 +6,7 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: /
+    schedule: {interval: monthly, time: '02:00', timezone: 'Etc/UTC'}
     groups:
       npm-production: {dependency-type: production}
       npm-development: {dependency-type: development}
@@ -13,6 +14,7 @@ updates:
 
   - package-ecosystem: github-actions
     directory: /
+    schedule: {interval: monthly, time: '02:00', timezone: 'Etc/UTC'}
     groups:
       github-actions: {patterns: ['*']}
     schedule: {interval: monthly}
