@@ -10,11 +10,9 @@ updates:
     groups:
       npm-production: {dependency-type: production}
       npm-development: {dependency-type: development}
-    schedule: {interval: monthly}
 
   - package-ecosystem: github-actions
     directory: /
     schedule: {interval: monthly, time: '02:00', timezone: 'Etc/UTC'}
     groups:
       github-actions: {patterns: ['*']}
-    schedule: {interval: monthly}
