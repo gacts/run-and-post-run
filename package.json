@@ -28,9 +28,9 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
-    "@vercel/ncc": "^0.44.0",
-    "eslint": "^10.4.1",
-    "globals": "^17.6.0"
+    "@vercel/ncc": "^0.44.1",
+    "eslint": "^10.6.0",
+    "globals": "^17.7.0"
   },
   "volta": {
     "node": "24"
